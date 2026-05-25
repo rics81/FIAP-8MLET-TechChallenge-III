@@ -1,3 +1,4 @@
-/airlines.csv
-/airports.csv
-/flights.csv
+examples/
+obsolete/
+*.csv
+*.parquet
