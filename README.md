@@ -4,6 +4,9 @@
 
 Este projeto realiza uma análise completa de padrões de atrasos de voos nos Estados Unidos, desde a exploração de dados até a construção de modelos de regressão logística binária e gradient boosting.
 
+## Vídeo
+https://drive.google.com/file/d/1Sr3BC85OJBqASlYFiBbc9ABDCH72axQl/view?usp=sharing
+
 ## Estrutura do Projeto
 
 ```
@@ -50,15 +53,16 @@ Implementa um modelo de regressão logística binária para prever atrasos:
 - 11% dos voos têm atraso > 30 minutos (632,697 voos)
 
 **Resultados principais:**
-- Companhias com maior taxa de atraso: NK (19%), F9 (17%), B6 (16%)
-- Estação de outono tem menos atrasos (-55.78% vs referência)
-- Sexta-feira tem menos atrasos (-27.20% vs referência)
-- Companhia WN tem 52.91% mais risco de atraso vs referência
+- Companhias com maior chance taxa de atraso: NK, F9 e B6
+- O outono tem menos chance de atraso
+- Sexta-feira tem menos chance de atraso
 
 **Métricas de avaliação:**
-- ROC AUC: 0.7500 (excelente discriminação)
-- Coeficiente GINI: 0.5000
-- Curva ROC plotada com visualização clara
+- ROC: 0.5366
+- Coeficiente GINI: 7,32%
+- Sensitividade: 10,91%
+- Especificidade: 88,32%%
+- Acurácia: 79,75%
 
 ---
 
@@ -72,10 +76,12 @@ Implementa um classificador XGBoost para comparação com regressão logística:
 - Divisão treino/teste: 80/20 (4.57M treino, 1.14M teste)
 
 **Performance:**
-- Acurácia treino: 51.62%
-- Acurácia teste: 51.60%
-- Recall teste: 68.81%
-- AUC teste: 0.6299
+- ROC teste: 0.6301
+- Coeficiente GINI teste: 26,02%
+- Sensitividade treino: 69.35%
+- Sensitividade teste: 68.57%
+- Acurácia treino: 51.83%
+- Acurácia teste: 51.79%
 
 **Features mais importantes:**
 - Identificadas automaticamente pelo modelo
@@ -129,14 +135,6 @@ Implementa um classificador XGBoost para comparação com regressão logística:
    - **Tempo de voo**: Diferença entre chegada e partida estimadas
    - **Clustering de rotas**: K-Means em coordenadas de origem/destino
 
-4. **Categorização de Atrasos**
-   - **Modelo Binário**: Delayed = 1 se arrival_delay > 30 min
-   - **Modelo Multinomial**: 
-     - 0: not_delayed (< 0 min)
-     - 1: lo_delay (0-15 min)
-     - 2: mid_delay (15-30 min)
-     - 3: high_delay (> 30 min)
-
 ---
 
 ## Principais Insights
@@ -156,21 +154,6 @@ Implementa um classificador XGBoost para comparação com regressão logística:
 | WN | 14% | Aeronave atrasada (56.27%) |
 | HA | 9% | Razões do sistema aéreo |
 
-### Padrões por Dia da Semana
-- **Quinta-feira**: -10.92% vs referência (menos atrasos)
-- **Sexta-feira**: -27.20% vs referência (significativamente menos atrasos)
-- **Domingo**: +6.25% vs referência (mais atrasos)
-
-### Padrões por Estação
-- **Outono**: -55.78% vs referência (significativamente menos atrasos)
-- **Primavera**: -22.00% vs referência (menos atrasos)
-- **Verão**: +1.02% vs referência (mais atrasos)
-
-### Regiões de Rotas
-- **Cluster 0 (Nordeste)**: 1,981 rotas, 1.97M voos, 6.67min atraso médio
-- **Cluster 1 (Oeste)**: 1,563 rotas, 1.92M voos, 5.21min atraso médio
-- **Cluster 2 (Sudeste)**: 1,090 rotas, 1.34M voos, 3.41min atraso médio
-
 ---
 
 ## Como Usar
@@ -186,18 +169,6 @@ pip install polars pandas numpy scikit-learn statsmodels xgboost matplotlib seab
    - `tc3_data_explorer.ipynb` (gera `df_final_ml_features.parquet`)
    - `tc3_lbr.ipynb` (regressão logística binária)
    - `tc3_xgboost.ipynb` (modelo XGBoost)
-
-### Interpretação de Resultados
-
-**Regressão Logística Binária:**
-- Coeficientes representam mudanças no log-odds de atraso
-- Valores positivos aumentam probabilidade de atraso
-- ROC AUC de 0.75 indica boa capacidade preditiva
-
-**XGBoost:**
-- Acurácia moderada (51.6%) reflete desbalanceamento de classes
-- Recall alto (68.8%) indica capacidade de identificar voos atrasados
-- Feature importance mostra quais variáveis mais contribuem
 
 ---
 
